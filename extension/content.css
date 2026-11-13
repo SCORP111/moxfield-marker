@@ -1,0 +1,39 @@
+/* Die Farben setzt content.js pro Karte als Custom Properties:
+   --mxm-stops  Farbabschnitte deckend      --mxm-tint  dieselben, halbtransparent
+   --mxm-first / --mxm-last  erste und letzte Farbe (für die Seitenränder) */
+
+/* Text- und Condensed-Text-Ansicht: Zeile einfärben, links ein deckender Balken */
+li[data-mxm] {
+  background:
+    linear-gradient(180deg, var(--mxm-stops)) left / 4px 100% no-repeat,
+    linear-gradient(90deg, var(--mxm-tint)) !important;
+  border-radius: 4px;
+}
+
+/* Bild-Ansichten (Grid, Stacks, Spoiler): Rahmen + Farbschleier über dem Kartenbild */
+div[data-mxm] div:has(> img.img-card) {
+  position: relative;
+}
+div[data-mxm] div:has(> img.img-card)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 4.75% / 3.5%;
+  background:
+    linear-gradient(90deg, var(--mxm-stops)) top / 100% 5px no-repeat,
+    linear-gradient(90deg, var(--mxm-stops)) bottom / 100% 5px no-repeat,
+    linear-gradient(var(--mxm-first), var(--mxm-first)) left / 5px 100% no-repeat,
+    linear-gradient(var(--mxm-last), var(--mxm-last)) right / 5px 100% no-repeat,
+    linear-gradient(90deg, var(--mxm-tint));
+  pointer-events: none;
+}
+
+/* Malmodus: Fadenkreuz über Karten */
+html.mxm-paint [data-hash][data-row-key],
+html.mxm-paint [data-hash][data-row-key] * {
+  cursor: crosshair !important;
+}
+html.mxm-paint li[data-hash][data-row-key]:hover {
+  outline: 1px dashed var(--mxm-pen, currentColor);
+  outline-offset: -1px;
+}
